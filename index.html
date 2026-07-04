@@ -435,7 +435,7 @@ a.link{color:var(--pine);text-decoration:underline;text-underline-offset:2px}
   .cv-corner.bl{bottom:3mm;left:3mm;border-right:none;border-top:none}
   .cv-corner.br{bottom:3mm;right:3mm;border-left:none;border-top:none}
   .cv-crest{width:30mm;height:30mm;margin-bottom:6mm}
-  .cv-title{font-size:64pt;font-weight:700;color:#2E4A3D;letter-spacing:.12em;margin:0;line-height:1}
+  .cv-title{font-size:64pt;font-weight:700;color:#2E4A3D;letter-spacing:.12em;margin:0;line-height:1}   .cv-to{display:flex;flex-direction:column;align-items:center;gap:3mm}   .cv-to .cv-to-name{font-size:42pt;line-height:1.22;letter-spacing:.06em;word-break:keep-all}   .cv-to .cv-to-suffix{font-size:20pt;color:#5f5d56;letter-spacing:.34em;font-weight:600;text-indent:.34em}
   .cv-title rt{font-size:11pt;color:#A9843F;letter-spacing:.5em;font-weight:500}
   .cv-sub{font-size:17pt;color:#23231F;letter-spacing:.42em;margin:8mm 0 2mm}
   .cv-tag{font-size:11pt;color:#5f5d56;letter-spacing:.34em}
@@ -2353,7 +2353,7 @@ function PrintSummary({ note, tasks, places, photoCache, mode, recipientId }){
             <span className="cv-corner tl" /><span className="cv-corner tr" /><span className="cv-corner bl" /><span className="cv-corner br" />
             <div className="cv-inner">
               <div className="pr-rule"><span className="ln" /><span className="dia">◆</span><span className="ln" /></div>
-              <h1 className="cv-title">{(recipName(note,rid)||"あなた")}　へ</h1>
+              <h1 className="cv-title cv-to"><span className="cv-to-name">{(recipName(note,rid)||"あなた")}</span><span className="cv-to-suffix">へ</span></h1>
               <div className="cv-sub">{note.name?note.name+" より":"わたしより"}</div>
               <div className="pr-rule"><span className="ln" /><span className="dia">◆</span><span className="ln" /></div>
               <div className="cv-ded">この一冊は、<br />あなたのために選んで綴じました。</div>

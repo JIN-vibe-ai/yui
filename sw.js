@@ -1,5 +1,5 @@
 /* 結（ゆい）Service Worker — オフライン対応 */
-const CACHE = "yui-v68";
+const CACHE = "yui-v69";
 const SHELL = [
   "./",
   "./index.html",
