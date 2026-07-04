@@ -401,7 +401,6 @@ a.link{color:var(--pine);text-decoration:underline;text-underline-offset:2px}
 
 /* ===== 装丁版 印刷テンプレート ===== */
 @page{ size:A4; margin:18mm 17mm; }
-@page cover{ margin:0; }
 .print-only{display:none}
 .tasks-print{display:none}
 @media print{
@@ -427,7 +426,7 @@ a.link{color:var(--pine);text-decoration:underline;text-underline-offset:2px}
   .pr-rule{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0}
   .pr-rule .ln{display:block;width:70px;height:1px;background:#A9843F}
   .pr-rule .dia{color:#A9843F;font-size:9px;letter-spacing:3px}
-  .pr-cover{page:cover;height:296mm;overflow:hidden;padding:11mm;background:#FBF9F3}
+  .pr-cover{height:252mm;overflow:hidden;padding:9mm;background:#FBF9F3;break-after:page;page-break-after:always}
   .cv-frame{height:100%;border:2px solid #2E4A3D;padding:5mm;position:relative}
   .cv-inner{height:100%;border:1px solid #B08D4C;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16mm 14mm}
   .cv-corner{position:absolute;width:9mm;height:9mm;border:1px solid #A9843F}
@@ -1099,6 +1098,10 @@ function taskStatus(t, deathDate, done){
 }
 
 /* ---------- 小コンポーネント ---------- */
+function secHasContent(sec, note){
+  if(sec.id==="timeline") return Array.isArray(note.timelineList) && note.timelineList.length>0;
+  return sec.fields.some((f)=>fieldFilled(f, note[f.id]));
+}
 function fieldFilled(f, val){
   if(f.type==="list") return Array.isArray(val) && val.some((it) => it && Object.keys(it).some((k) => (""+(it[k]||"")).trim()!==""));
   return (""+(val||"")).trim()!=="";
@@ -2341,7 +2344,7 @@ function PrintSummary({ note, tasks, places, photoCache, mode, recipientId }){
   if(mode==="recipient"){
     const rid=recipientId;
     const secTo=note.__secTo||{};
-    const secs=NOTE_SECTIONS.filter((sec)=> sec.id!=="memo" && (!(secTo[sec.id]&&secTo[sec.id].length) || secTo[sec.id].includes(rid)));
+    const secs=NOTE_SECTIONS.filter((sec)=> sec.id!=="memo" && secHasContent(sec,note) && (!(secTo[sec.id]&&secTo[sec.id].length) || secTo[sec.id].includes(rid)));
     const letters=(note.__letters||[]).filter((l)=> l.to===rid);
     return (
       <div className="print-only">
@@ -2404,7 +2407,7 @@ function PrintSummary({ note, tasks, places, photoCache, mode, recipientId }){
         <div className="pr-rule"><span className="ln" /><span className="dia">◆</span><span className="ln" /></div>
         <div className="toc-list">
           <div className="toc-item"><span className="toc-no">はじめに</span><span className="toc-t">もしものとき、最初にお読みください</span><span className="toc-dot" /></div>
-          {NOTE_SECTIONS.filter((sec) => sec.id!=="memo").map((sec,idx) => (
+          {NOTE_SECTIONS.filter((sec) => sec.id!=="memo" && secHasContent(sec,note)).map((sec,idx) => (
             <div className="toc-item" key={sec.id}><span className="toc-no">其の{prKanji(idx+1)}</span><span className="toc-t">{sec.title}</span><span className="toc-dot" /></div>
           ))}
           {(note.__letters&&note.__letters.length>0) && <div className="toc-item"><span className="toc-no">巻末</span><span className="toc-t">未来への手紙</span><span className="toc-dot" /></div>}
@@ -2413,7 +2416,7 @@ function PrintSummary({ note, tasks, places, photoCache, mode, recipientId }){
         </div>
       </section>
 
-      {NOTE_SECTIONS.filter((sec) => sec.id!=="memo").map((sec,idx) => (
+      {NOTE_SECTIONS.filter((sec) => sec.id!=="memo" && secHasContent(sec,note)).map((sec,idx) => (
         <section className="pr-sec" key={sec.id}>
           <div className="pr-sec-h"><span className="pr-sec-no">其の{prKanji(idx+1)}</span><span className="pr-sec-t">{sec.title}</span></div>
           {sec.intro && <p className="pr-sec-intro">{sec.intro}</p>}
