@@ -1541,9 +1541,9 @@ function App(){
     }
     setMenuOpen(false);
   };
-  const doPrint = () => { setMenuOpen(false); setPrintMode("full"); setTimeout(() => window.print(), 60); };
-  const doPrintTasks = () => { setMenuOpen(false); setPrintMode("tasks"); setTimeout(() => { window.print(); setPrintMode("full"); }, 90); };
-  const doPrintRecipient = (rid) => { setMenuOpen(false); setPrintRecipient(rid); setPrintMode("recipient"); setTimeout(() => { window.print(); setPrintMode("full"); setPrintRecipient(""); }, 120); };
+  const doPrint = () => { setMenuOpen(false); setPrintRecipient(""); setPrintMode("full"); setTimeout(() => window.print(), 80); };
+  const doPrintTasks = () => { setMenuOpen(false); setPrintMode("tasks"); var reset = function(){ setPrintMode("full"); window.removeEventListener("focus", reset); }; window.addEventListener("focus", reset); setTimeout(function(){ window.print(); }, 160); };
+  const doPrintRecipient = (rid) => { setMenuOpen(false); setPrintRecipient(rid); setPrintMode("recipient"); var reset = function(){ setPrintMode("full"); setPrintRecipient(""); window.removeEventListener("focus", reset); }; window.addEventListener("focus", reset); setTimeout(function(){ window.print(); }, 180); };
   const loadDemo = () => { setNote(DEMO.note); setTasks(DEMO.tasks); setPlaces(DEMO.places); setPhotoCache((c) => Object.assign({}, c, DEMO.photos)); setChose(true); setMode("self"); setTab("home"); showToast("デモ版：入力済みの見本を読み込みました"); };
 
   return (
